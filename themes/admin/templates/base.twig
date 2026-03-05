@@ -1,0 +1,135 @@
+{% set defaultLanguage = language() %}
+{% set languages_Support = supportLanguages() %}
+<!DOCTYPE html>
+<html lang="{{ defaultLanguage }}" translate="yes">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel{% endblock %} - {{ app_name }}</title>
+    
+    <!-- Isolated Admin CSS -->
+    <link rel="stylesheet" href="/themes/admin/assets/fontawesome-free-7.1.0-web/css/all.min.css">
+    <link rel="stylesheet" href="/themes/admin/assets/css/admin.css">
+    <link rel="stylesheet" href="/modules/commerce_store/assets/ckeditor5/ckeditor5.css">
+    <link rel="stylesheet" href="/themes/admin/assets/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" href="/themes/admin/assets/css/autocomplete.css">
+    <link rel="stylesheet" href="/themes/admin/assets/tagify-4.36.0/dist/tagify.css">
+    {% block head %}{% endblock %}
+</head>
+<body class="admin-body">
+    {% if languages_Support is not empty %}
+        <div id="google_translate_element"></div>
+    {% endif %}
+    <div id="admin-container">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="admin-header-left">
+                <h1 class="admin-logo">
+                    <a href="/">{{ app_name }}</a>
+                </h1>
+            </div>
+            <div class="admin-header-right">
+                <div class="admin-user-menu">
+                    <label style="display: none;" for="languageSupport">Languages</label>
+                    <select name="lang" id="languageSupport" class="form-control">
+                        {% for index,lang in  languages_Support %}
+                        <option translate="no" value="{{ index }}" {% if defaultLanguage == index %} selected {% endif %}>{{ lang }}</option>
+                        {% else %}
+                            <option value="">Languages support not enabled</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="admin-user-menu">
+                    <span class="admin-user-name">{{ user.display_name or user.username }}</span>
+                    <a href="/user/logout" class="admin-logout">Logout</a>
+                </div>
+            </div>
+        </header>
+
+        <div class="admin-main">
+            <!-- Sidebar -->
+            <aside class="admin-sidebar">
+                <nav class="admin-nav">
+                    <ul class="admin-nav-list">
+                        {% if menus.admin is defined %}
+                            {% for menu in menus.admin %}
+                                <li class="admin-nav-item" data-weight="{{ menu.attributes.weight|default(999) }}">
+                                    <a href="{{ menu_url(menu) }}" class="admin-nav-link {% if app.request.path_info starts with menu_url(menu) %}active{% endif %}">
+                                        {% if menu.attributes.class is defined and menu.attributes.class %}
+                                            <i class="{{ menu.attributes.class }}"></i>
+                                        {% endif %}
+                                        {{ menu.title }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <!-- Fallback menu if no menus are registered -->
+                            <li class="admin-nav-item">
+                                <a href="/" class="admin-nav-link {% if app.request.path_info == '/' %}active{% endif %}">
+                                    <i class="fa fa-home"></i>
+                                    Home
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+
+                <!-- Sidebar Custom menus -->
+                <nav class="admin-nav">
+                    <ul class="admin-nav-list">
+                        {% if menus is defined %}
+                            {% for index, menuInners in menus %}
+                                {% if index != 'admin' %}
+                                    {% for menu in menuInners %}
+                                        <li class="admin-nav-item" data-weight="{{ menu.attributes.weight|default(999) }}">
+                                            <a href="{{ menu_url(menu) }}" class="admin-nav-link {% if app.request.path_info starts with menu_url(menu) %}active{% endif %}">
+                                                {% if menu.attributes.class is defined and menu.attributes.class %}
+                                                    <i class="{{ menu.attributes.class }}"></i>
+                                                {% endif %}
+                                                {{ menu.title }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="admin-content">
+                {% set statusMessages = get_messages() %}
+                {% if statusMessages is not empty %}
+                    <div class="flash-messages">
+                        {% for message in statusMessages %}
+                            <div class="alert alert-{{ message.type }}">
+                                {{ message.text }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Isolated Admin JavaScript -->
+    <script src="/themes/admin/assets/fontawesome-free-7.1.0-web/js/all.min.js"></script>
+    <script src="/themes/admin/assets/flatpickr/flatpickr.min.js"></script>
+    <script src="/themes/admin/assets/tagify-4.36.0/dist/tagify.js"></script>
+    <script src="/themes/admin/assets/tagify-4.36.0/dist/tagify.polyfills.min.js"></script>
+    <script src="/themes/admin/assets/js/admin.js"></script>
+    <script src="/themes/admin/assets/js/address.js"></script>
+    <script type="importmap" src="/themes/admin/assets/ck-importmap.json"></script>
+    <script type="module" src="/themes/admin/assets/ck.js"></script>
+    <script src="/themes/admin/assets/flatpickr.js"></script>
+    <script src="/themes/admin/assets/js/autocomplete.js"></script>
+    <script src="/themes/admin/assets/js/tag.js"></script>
+    {% if languages_Support is not empty %}
+        <script src="/modules/languages/assets/js/lang-switcher.js"></script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    {% endif %}
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,14 @@
+name: stream-videos
+recipe: lamp
+config:
+  webroot: .
+  php: "8.4"
+services:
+  appserver:
+    config:
+      php: .lando/php.ini
+  phpmyadmin:
+    type: phpmyadmin
+    hosts:
+      - database
+    port: 8081
