@@ -111,7 +111,10 @@ class StreamDashboardController extends ControllerBase
             'occupied_space'    => $this->formatBytes($used),
             'total_space'        => $this->formatBytes($totalDisk),
             'percent_used'       => $this->calculatePercentage( $used, $totalDisk),
+            'playlist_count'     => $this->playlist->getPlaylistCount(),
+            'playlists'          => $this->playlist->getPlaylists(['limit' => 5])['playlists'] ?? []
         ];
+      
         return $this->renderTwig("@streamer/dashboard.html.twig", $dashboard);
     }
 

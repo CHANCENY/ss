@@ -194,4 +194,14 @@ class Playlist
         return $this->databaseService->query($query, ...$bindParams)->fetchAll();
     }
 
+    public function getPlaylistCount()
+    {
+        return $this->databaseService->query("SELECT COUNT(*) as total FROM playlists")->fetch()['total'] ?? 0;
+    }
+
+    public function getRecentPlaylists(int $limit = 5): array
+    {
+        return $this->databaseService->query("SELECT * FROM playlists ORDER BY created_at DESC LIMIT :limit", $limit)->fetchAll();
+    }
+
 }

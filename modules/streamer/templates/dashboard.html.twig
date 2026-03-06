@@ -16,7 +16,7 @@
                         <div style="color: #666;">TV Shows</div>
                     </div>
                     <div style="text-align: center;">
-                        <div style="font-size: 2rem; font-weight: bold; color: #11998e;">12</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #11998e;">{{ playlist_count }}</div>
                         <div style="color: #666;">Playlists</div>
                     </div>
                 </div>
@@ -71,10 +71,7 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
                 <a href="{{ url('streamer.dashboard.add.movie') }}" class="btn btn-primary" style="text-align: center;">➕ Add Movie</a>
                 <a href="{{ url('streamer.dashboard.shows.add') }}" class="btn btn-primary" style="text-align: center;">➕ Add TV Show</a>
-                <a href="playlist-create.html" class="btn btn-primary" style="text-align: center;">➕ Create Playlist</a>
-                <a href="movie-cutting.html" class="btn btn-success" style="text-align: center;">✂️ Cut Movies</a>
-                <a href="season-create.html" class="btn btn-warning" style="text-align: center;">➕ Add Season</a>
-                <a href="episode-create.html" class="btn btn-warning" style="text-align: center;">➕ Add Episode</a>
+                <a href="{{ url('streamer.dashboard.playlists.add') }}" class="btn btn-primary" style="text-align: center;">➕ Create Playlist</a>
             </div>
         </div>
 
@@ -119,16 +116,14 @@
                 <p style="color: #666; margin-bottom: 15px;">Create and manage custom playlists</p>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <a href="{{ url('streamer.dashboard.playlists') }}" class="btn btn-primary" style="text-align: center;">📋 Browse Playlists</a>
-                    <a href="playlist-create.html" class="btn btn-success" style="text-align: center;">➕ Create Playlist</a>
-                    <a href="movie-cutting.html" class="btn btn-warning" style="text-align: center;">✂️ Movie Cutting</a>
-                    <a href="playlist-edit.html" class="btn btn-warning" style="text-align: center;">✏️ Edit Playlists</a>
+                    <a href="{{ url('streamer.dashboard.playlists.add') }}" class="btn btn-success" style="text-align: center;">➕ Create Playlist</a>
                 </div>
                 <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e1e5e9;">
                     <p><strong>Active Playlists:</strong></p>
                     <ul style="margin: 5px 0; padding-left: 20px; color: #666;">
-                        <li>Action Marathon (8 movies)</li>
-                        <li>Sci-Fi Classics (6 movies)</li>
-                        <li>Weekend Binge (3 cuts)</li>
+                        {% for playlist in playlists %}
+                        <li>{{ playlist.title }} ({{ playlist.item_count }} movies)</li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -144,20 +139,6 @@
                         <div style="background: linear-gradient(90deg, #11998e, #38ef7d); height: 100%; width: {{ percent_used }}%;"></div>
                     </div>
                     <p><strong>{{ percent_used }}% Used</strong> • {{ occupied_space }} of {{ total_space }}</p>
-                </div>
-                <div class="grid-item">
-                    <h4>🔄 Processing</h4>
-                    <div style="background: #f0f0f0; border-radius: 8px; overflow: hidden; height: 20px; margin: 10px 0;">
-                        <div style="background: linear-gradient(90deg, #f2994a, #f2c94c); height: 100%; width: 20%;"></div>
-                    </div>
-                    <p><strong>2 Active Jobs</strong> • 1 Cutting, 1 Encoding</p>
-                </div>
-                <div class="grid-item">
-                    <h4>📊 Performance</h4>
-                    <div style="background: #f0f0f0; border-radius: 8px; overflow: hidden; height: 20px; margin: 10px 0;">
-                        <div style="background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; width: 85%;"></div>
-                    </div>
-                    <p><strong>85% Optimal</strong> • All Systems Running</p>
                 </div>
             </div>
         </div>
