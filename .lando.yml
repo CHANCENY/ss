@@ -4,11 +4,14 @@ config:
   webroot: .
   php: "8.4"
 services:
-  appserver:
-    config:
-      php: .lando/php.ini
   phpmyadmin:
     type: phpmyadmin
     hosts:
       - database
     port: 8081
+  appserver:
+    config:
+      php: lando/zzzzzz-express-custom.ini
+    overrides:
+      volumes:
+        - ./lando/apache.conf:/etc/apache2/conf-enabled/z-limit.conf
