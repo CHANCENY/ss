@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineStream - Watch Movies & TV Shows</title>
+    <link rel="stylesheet" href="/modules/streamer_frontend/assets/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {% block head %}{% endblock %}
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-left">
+            <div class="logo">
+                <span class="logo-text">CineStream</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="movies.html" class="nav-link">Movies</a></li>
+                <li><a href="tv-shows.html" class="nav-link">TV Shows</a></li>
+                <li><a href="playlists.html" class="nav-link">Playlists</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search movies, shows...">
+                <button class="search-btn">🔍</button>
+            </div>
+            <button class="menu-toggle">☰</button>
+        </div>
+    </div>
+</nav>
+
+{% block hero %}{% endblock %}
+
+{% block main %}{% endblock %}
+
+</body>
+</html>

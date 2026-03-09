@@ -50,3 +50,14 @@ front:
     movie:
       path: "/w/dashboard/internal/search/movie/local"
       method: "POST"
+cli:
+  movie:
+    discover:
+      path: 'discover/movie'
+      params: ['page']
+      results: ['id', 'title', 'original_title', 'overview', 'release_date', 'poster_path', 'backdrop_path', 'vote_average', 'vote_count', 'original_language', 'popularity', 'adult', 'video']
+  show:
+    discover:
+      path: "discover/tv"
+      params: ['page']
+      results: ['adult','backdrop_path','genre_ids','id','origin_country','original_language','original_name','overview','popularity','poster_path','first_air_date','name','vote_average','vote_count']

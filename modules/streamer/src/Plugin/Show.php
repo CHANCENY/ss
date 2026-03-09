@@ -121,6 +121,11 @@ class Show
             $whereConditions[] = "language = :language";
             $bindParams['language'] = $params['language'];
         }
+
+        if (!empty($params['imdb_id'])) {
+            $whereConditions[] = "imdb_id = :imdb_id";
+            $bindParams['imdb_id'] = $params['imdb_id'];
+        }
         
         $whereClause = !empty($whereConditions) ? 'WHERE ' . implode(' AND ', $whereConditions) : '';
         

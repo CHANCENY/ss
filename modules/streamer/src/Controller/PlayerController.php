@@ -202,6 +202,7 @@ class PlayerController extends ControllerBase
     {
         $content = json_decode($request->getContent(), true);
         $validated = [];
+        $content['ip_address'] = $request->getClientIp();
 
         if (!empty($content['user_id'])) {
             $validated['user_id'] = $content['user_id'];
@@ -225,6 +226,10 @@ class PlayerController extends ControllerBase
 
         if (!empty($content['duration'])) {
             $validated['duration'] = $content['duration'];
+        }
+
+        if (!empty($content['media'])) {
+            $validated['media'] = $content['media'];
         }
 
         if (!empty($content['video_id'])) {

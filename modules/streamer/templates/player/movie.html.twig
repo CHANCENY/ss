@@ -56,7 +56,8 @@
             },
             playBoxLoadedmetadata: async (type, event, object, videoSegment) => {
                 const currentTime = Math.floor(type.target.currentTime);
-                const params = await getRecordParams(type, object, currentTime)
+                const params = await getRecordParams(type, object, currentTime);
+                params.media = "movie"
                 await recordPlayer(params);
             },
             playBoxLoadeddata: async (type, event, object, videoSegment) => {
@@ -74,16 +75,19 @@
             playBoxPlay: async (type, event, object, videoSegment) => {
                 const currentTime = Math.floor(type.target.currentTime);
                 const params = await getRecordParams(type, object, currentTime)
+                params.media = "movie"
                 await recordPlayer(params);
             },
             playBoxPlaying: async (type, event, object, videoSegment) => {
                 const currentTime = Math.floor(type.target.currentTime);
                 const params = await getRecordParams(type, object, currentTime)
+                params.media = "movie"
                 await recordPlayer(params);
             },
             playBoxPause: async (type, event, object, videoSegment) => {
                 const currentTime = Math.floor(type.target.currentTime);
                 const params = await getRecordParams(type, object, currentTime)
+                params.media = "movie"
                 await recordPlayer(params);
             },
             playBoxWaiting: (type, event, object, videoSegment) => {
@@ -92,11 +96,13 @@
             playBoxSeeking: async (type, event, object, videoSegment) => {
                 const currentTime = Math.floor(type.target.currentTime);
                 const params = await getRecordParams(type, object, currentTime)
+                params.media = "movie"
                 await recordPlayer(params);
             },
             playBoxSeeked: async (type, event, object, videoSegment) => {
                 const currentTime = Math.floor(type.target.currentTime);
                 const params = await getRecordParams(type, object, currentTime)
+                params.media = "movie"
                 await recordPlayer(params);
             },
             playBoxRatechange: (type, event, object, videoSegment) => {
@@ -105,6 +111,7 @@
             playBoxVolumechange: async (type, event, object, videoSegment) => {
                 const currentTime = Math.floor(type.target.currentTime);
                 const params = await getRecordParams(type, object, currentTime)
+                params.media = "movie"
                 await recordPlayer(params);
             },
             playBoxStalled: (type, event, object, videoSegment) => {
@@ -123,15 +130,15 @@
                     lastSentTime = currentTime;
 
                     const params = await getRecordParams(type, object, currentTime);
+                    params.media = "movie"
                     await recordPlayer(params);
-
-                    console.log("Saved progress:", params);
                 }
 
             },
             playBoxEnded: async (type, event, object, videoSegment) => {
                 const currentTime = Math.floor(type.target.currentTime);
                 const params = await getRecordParams(type, object, currentTime)
+                params.media = "movie"
                 await recordPlayer(params);
             },
             playBoxError: (type, event, object, videoSegment) => {

@@ -7,8 +7,9 @@ CREATE TABLE player_logs (
                              event VARCHAR(50) NOT NULL,
                              ip_address VARCHAR(45) NULL,
                              user_agent TEXT NULL,
+                             media VARCHAR(50) NOT NULL,
                              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
+                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                              INDEX (video_id),
                              INDEX (user_id)
 );

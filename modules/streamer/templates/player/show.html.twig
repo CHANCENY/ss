@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="/modules/streamer/assets/css/extra.css">
     <link rel="stylesheet" href="https://unpkg.com/simp-player@1.0.2/dist/simp-player.css?v={{ unique }}">
+    <script src="/modules/streamer/assets/js/player.js"></script>
 </head>
 <body>
 
@@ -16,7 +17,7 @@
 <script src="https://unpkg.com/simp-player@1.0.2/dist/vplayer.umd.js?v={{ unique }}"></script>
 <script>
     async function startPlayer() {
-
+        let lastSentTime = 0;
         const events = {
             // Custom control events
             changeVideo: (event, video, index) => {
@@ -50,11 +51,14 @@
             playBoxDurationchange: (type, event, object, videoSegment) => {
 
             },
-            playBoxLoadedmetadata: (type, event, object, videoSegment) => {
-
+            playBoxLoadedmetadata: async (type, event, object, videoSegment) => {
+                const currentTime = Math.floor(type.target.currentTime);
+                const params = await getRecordParams(type, object, currentTime)
+                params.media = "episode"
+                await recordPlayer(params);
             },
-            playBoxLoadeddata: (type, event, object, videoSegment) => {
-
+            playBoxLoadeddata: async (type, event, object, videoSegment) => {
+                console.log("Box loaded")
             },
             playBoxProgress: (type, event, object, videoSegment) => {
 
@@ -65,29 +69,47 @@
             playBoxCanplaythrough: (type, event, object, videoSegment) => {
 
             },
-            playBoxPlay: (type, event, object, videoSegment) => {
-
+            playBoxPlay: async (type, event, object, videoSegment) => {
+                const currentTime = Math.floor(type.target.currentTime);
+                const params = await getRecordParams(type, object, currentTime)
+                params.media = "episode"
+                await recordPlayer(params);
             },
-            playBoxPlaying: (type, event, object, videoSegment) => {
-
+            playBoxPlaying: async (type, event, object, videoSegment) => {
+                const currentTime = Math.floor(type.target.currentTime);
+                const params = await getRecordParams(type, object, currentTime)
+                params.media = "episode"
+                await recordPlayer(params);
             },
-            playBoxPause: (type, event, object, videoSegment) => {
-
+            playBoxPause: async (type, event, object, videoSegment) => {
+                const currentTime = Math.floor(type.target.currentTime);
+                const params = await getRecordParams(type, object, currentTime)
+                params.media = "episode"
+                await recordPlayer(params);
             },
             playBoxWaiting: (type, event, object, videoSegment) => {
 
             },
-            playBoxSeeking: (type, event, object, videoSegment) => {
-
+            playBoxSeeking: async (type, event, object, videoSegment) => {
+                const currentTime = Math.floor(type.target.currentTime);
+                const params = await getRecordParams(type, object, currentTime)
+                params.media = "episode"
+                await recordPlayer(params);
             },
-            playBoxSeeked: (type, event, object, videoSegment) => {
-
+            playBoxSeeked: async (type, event, object, videoSegment) => {
+                const currentTime = Math.floor(type.target.currentTime);
+                const params = await getRecordParams(type, object, currentTime)
+                params.media = "episode"
+                await recordPlayer(params);
             },
             playBoxRatechange: (type, event, object, videoSegment) => {
 
             },
-            playBoxVolumechange: (type, event, object, videoSegment) => {
-
+            playBoxVolumechange: async (type, event, object, videoSegment) => {
+                const currentTime = Math.floor(type.target.currentTime);
+                const params = await getRecordParams(type, object, currentTime)
+                params.media = "episode"
+                await recordPlayer(params);
             },
             playBoxStalled: (type, event, object, videoSegment) => {
 
@@ -95,11 +117,26 @@
             playBoxSuspend: (type, event, object, videoSegment) => {
 
             },
-            playBoxTimeupdate: (type, event, object, videoSegment) => {
+            playBoxTimeupdate: async (type, event, object, videoSegment) => {
+
+                const currentTime = Math.floor(type.target.currentTime);
+
+                // send request every 120 seconds
+                if (currentTime - lastSentTime >= 120) {
+
+                    lastSentTime = currentTime;
+
+                    const params = await getRecordParams(type, object, currentTime);
+                    params.media = "episode"
+                    await recordPlayer(params);
+                }
 
             },
-            playBoxEnded: (type, event, object, videoSegment) => {
-
+            playBoxEnded: async (type, event, object, videoSegment) => {
+                const currentTime = Math.floor(type.target.currentTime);
+                const params = await getRecordParams(type, object, currentTime)
+                params.media = "episode"
+                await recordPlayer(params);
             },
             playBoxError: (type, event, object, videoSegment) => {
 

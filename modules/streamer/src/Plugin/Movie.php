@@ -137,6 +137,10 @@ class Movie
             $whereConditions[] = "featured = :featured";
             $bindParams['featured'] = $params['featured'];
         }
+        if (!empty($params['imdb_id'])) {
+            $whereConditions[] = "imdb_id = :imdb_id";
+            $bindParams["imdb_id"] = $params['imdb_id'];
+        }
 
         $whereClause = !empty($whereConditions) ? 'WHERE ' . implode(' AND ', $whereConditions) : '';
         
@@ -258,5 +262,40 @@ class Movie
             Message::error($e->getMessage());
             return false;
         }
+    }
+
+    public function getRandomFeaturedMovie(int $limit = 10)
+    {
+        return $this->databaseService->query("SELECT * FROM movies WHERE featured = 1 ORDER BY RAND() LIMIT :limit",$limit)
+            ->fetchAll();
+    }
+
+    /**
+     * @throws DatabaseException
+     */
+    public function getMoviePlaying(int $limit = 10, ?string $ip = null)
+    {
+        $stmt = null;
+        $query = "";
+        if (empty($ip)) {
+            $query = "SELECT * FROM player_logs WHERE event = 'timeupdate' AND current_time_played < duration ORDER BY created_at DESC LIMIT :limit";
+            $stmt = $this->databaseService->query($query, $limit);
+        }
+        else {
+            $query = "SELECT * FROM player_logs WHERE event = 'timeupdate' AND ip_address = :ip AND current_time_played < duration ORDER BY created_at DESC LIMIT :limit";
+            $stmt = $this->databaseService->query($query, ...$i=['limit' => $limit, 'ip' => $ip]);
+        }
+        return $stmt->fetchAll();
+
+    }
+
+    /**
+     * @throws DatabaseException
+     */
+    public function getMoviePlayingNow(int $limit = 10)
+    {
+        $query = "SELECT * FROM player_logs WHERE event='timeupdate' AND current_time_played < duration AND updated_at >= NOW() - INTERVAL 120 SECOND ORDER BY updated_at DESC LIMIT :limit";
+        $stmt = $this->databaseService->query($query, $limit);
+        return $stmt->fetchAll();
     }
 }
