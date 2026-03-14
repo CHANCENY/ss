@@ -28,13 +28,17 @@ class Show
         return Http::parseBodyFields($this->http->getResponseBody()['results'] ?? [], 'endpoint.show.search.results');
     }
 
-    public function getShow(array $params): array
+    public function getShow(array $params, bool $response = false): array
     {
         if ($this->authentication->isAuthenticated()) {
             $this->http->clear();
             $paramsValidated = Http::parseParams($params, 'endpoint.show.detail.params');
             $this->http->setParams($paramsValidated);
             $this->http->request($this->http->getConfig()->get('endpoint.show.detail.path'));
+
+            if ($response) {
+                return $this->http->getResponseBody();
+            }
             return Http::getValue($this->http->getResponseBody(), 'endpoint.show.detail.results');
         }
         return [];
@@ -94,7 +98,7 @@ class Show
         
         if (!empty($params['genre'])) {
             $whereConditions[] = "JSON_CONTAINS(genres, :genre)";
-            $bindParams['genre'] = json_encode([$params['genre']]);
+            $bindParams['genre'] = json_encode(['value'=>$params['genre']]);
         }
         
         if (!empty($params['year_from'])) {

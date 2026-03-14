@@ -5,6 +5,7 @@ namespace Simp\Pindrop\Modules\streamer\src\Plugin;
 use Random\RandomException;
 use Simp\Pindrop\Database\DatabaseException;
 use Simp\Pindrop\Database\DatabaseService;
+use Symfony\Component\HttpFoundation\Request;
 
 class Playlist
 {
@@ -14,15 +15,14 @@ class Playlist
 
     /**
      * @throws DatabaseException
-     * @throws RandomException
      */
-    public function createPlaylist(string $title, string $description = "", bool $is_public = false): int
+    public function createPlaylist(string $session, string $title, string $description = "", bool $is_public = false): int
     {
         $validated = [
             'title' => $title,
             'description' => $description,
             'is_public' => $is_public ? 1 : 0,
-            'session_token' => bin2hex(random_bytes(16)),
+            'session_token' => $session,
         ];
         return $this->databaseService->insert('playlists', $validated);
     }
@@ -30,7 +30,7 @@ class Playlist
     /**
      * @throws DatabaseException
      */
-    public function getPlaylist(?string $session_token = null, ?int $pid = null): array
+    public function getPlaylist(?string $session_token = null, ?int $pid = null): array|bool
     {
         if (!empty($session_token)) {
             return $this->databaseService->query("SELECT * FROM playlists WHERE session_token = :session_token LIMIT 1", ...$o = ['session_token' => $session_token])
@@ -47,9 +47,15 @@ class Playlist
     /**
      * @throws DatabaseException
      */
-    public function addPlaylistItem(string $session_token, int $video_id): false|int
+    public function addPlaylistItem($session_token, int $video_id): false|int
     {
-        $playlist = $this->getPlaylist($session_token);
+        $playlist = [];
+        if (is_string($session_token)) {
+            $playlist = $this->getPlaylist($session_token);
+        }
+        elseif (is_numeric($session_token)) {
+            $playlist = $this->getPlaylist(pid: $session_token);
+        }
         if (empty($playlist)) {
             return false;
         }
@@ -117,6 +123,11 @@ class Playlist
         if (isset($params['is_public'])) {
             $whereConditions[] = "is_public = :is_public";
             $bindParams['is_public'] = $params['is_public'] ? 1 : 0;
+        }
+
+        if (isset($params['session_token'])) {
+            $whereConditions[] = "session_token = :session_token";
+            $bindParams['session_token'] = $params['session_token'];
         }
         
         $whereClause = !empty($whereConditions) ? 'WHERE ' . implode(' AND ', $whereConditions) : '';

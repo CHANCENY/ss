@@ -69,7 +69,7 @@
                         <a href="{{ playingNow.media == 'movie' ? url('streamer.dashboard.movie.watch', {movie_id: playingNow.data.id}) : url('streamer.dashboard.shows.watch', {show_id: playingNow.data.id}) }}" class="card-action-btn" title="Play">▶</a>
                         <a href="playlists.html" class="card-action-btn" title="Add to Playlist">+</a>
                     </div>
-                    <a href="movie-detail.html?id=5">
+                    <a href="{{ playingNow.media == 'movie' ? url('streamer_frontend.front.movie.detail', {movie_id: playingNow.data.id}) : url('streamer_frontend.front.show.detail', {show_id: playingNow.data.id}) }}">
                         <img src="{{ playingNow.data.thumbnail_path }}" alt="">
                         <div class="content-card-overlay">
                             <div class="content-card-title">{{ playingNow.data.title }}</div>
@@ -93,7 +93,7 @@
                         <a href="{{ url('streamer.dashboard.movie.watch', {movie_id: popularMovie.id}) }}" class="card-action-btn" title="Play">▶</a>
                         <a href="playlists.html" class="card-action-btn" title="Add to Playlist">+</a>
                     </div>
-                    <a href="movie-detail.html?id=5">
+                    <a href="{{ url('streamer_frontend.front.movie.detail', {movie_id: popularMovie.id}) }}">
                         <img src="{{ popularMovie.thumbnail_path }}" alt="">
                         <div class="content-card-overlay">
                             <div class="content-card-title">{{ popularMovie.title }}</div>
@@ -117,7 +117,7 @@
                         <a href="{{ url('streamer.dashboard.shows.watch', {show_id: popularShow.id}) }}" class="card-action-btn" title="Play First Episode">▶</a>
                         <a href="playlists.html" class="card-action-btn" title="Add to Playlist">+</a>
                     </div>
-                    <a href="tv-show-detail.html?id=7">
+                    <a href="{{ url('streamer_frontend.front.show.detail', {show_id: popularShow.id}) }}">
                         <img src="{{ popularShow.thumbnail_path }}" alt="">
                         <div class="content-card-overlay">
                             <div class="content-card-title">{{ popularShow.title }}</div>
@@ -141,7 +141,7 @@
                         <a href="{{ url('streamer.dashboard.shows.watch', {show_id: newReleaseShow.id}) }}" class="card-action-btn" title="Play">▶</a>
                         <a href="playlists.html" class="card-action-btn" title="Add to Playlist">+</a>
                     </div>
-                    <a href="movie-detail.html?id=5">
+                    <a href="{{ url('streamer_frontend.front.show.detail', {show_id: newReleaseShow.id}) }}">
                         <img src="{{ newReleaseShow.thumbnail_path }}" alt="">
                         <div class="content-card-overlay">
                             <div class="content-card-title">{{ newReleaseShow.title }}</div>
@@ -158,7 +158,7 @@
                             <a href="{{ url('streamer.dashboard.movie.watch', {movie_id: newReleaseMovie.id}) }}" class="card-action-btn" title="Play">▶</a>
                             <a href="playlists.html" class="card-action-btn" title="Add to Playlist">+</a>
                         </div>
-                        <a href="movie-detail.html?id=5">
+                        <a href="{{ url('streamer_frontend.front.movie.detail', {movie_id: newReleaseMovie.id}) }}">
                             <img src="{{ newReleaseMovie.thumbnail_path }}" alt="">
                             <div class="content-card-overlay">
                                 <div class="content-card-title">{{ newReleaseMovie.title }}</div>

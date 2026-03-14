@@ -40,17 +40,22 @@ class Movie
     /**
      * Get movie from tmdb database
      * @param array $params
+     * @param bool $respons
      * @return array
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function getMovie(array $params): array
+    public function getMovie(array $params, bool $respons = false): array
     {
         if ($this->authentication->isAuthenticated()) {
             $this->http->clear();
             $paramsValidated = Http::parseParams($params, 'endpoint.movies.detail.params');
             $this->http->setParams($paramsValidated);
             $this->http->request($this->http->getConfig()->get('endpoint.movies.detail.path'));
+
+            if ($respons) {
+                return $this->http->getResponseBody();
+            }
             return Http::getValue($this->http->getResponseBody(), 'endpoint.movies.detail.results');
         }
         return [];

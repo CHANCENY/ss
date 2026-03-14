@@ -17,10 +17,10 @@
                 <span class="logo-text">CineStream</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="index.html" class="nav-link active">Home</a></li>
-                <li><a href="movies.html" class="nav-link">Movies</a></li>
-                <li><a href="tv-shows.html" class="nav-link">TV Shows</a></li>
-                <li><a href="playlists.html" class="nav-link">Playlists</a></li>
+                <li><a href="/" class="nav-link {{ is_route('admin.home') ? 'active' : '' }}">Home</a></li>
+                <li><a href="/movies" class="nav-link {{ is_route('streamer_frontend.front.movies') ? 'active' : '' }}">Movies</a></li>
+                <li><a href="/shows" class="nav-link  {{ is_route('streamer_frontend.front.shows') ? 'active' : '' }}">TV Shows</a></li>
+                <li><a href="/playlists" class="nav-link  {{ is_route('streamer_frontend.front.playlists') ? 'active' : '' }}">Playlists</a></li>
             </ul>
         </div>
         <div class="nav-right">
@@ -36,6 +36,8 @@
 {% block hero %}{% endblock %}
 
 {% block main %}{% endblock %}
+
+{% block scripts %}{% endblock %}
 
 </body>
 </html>

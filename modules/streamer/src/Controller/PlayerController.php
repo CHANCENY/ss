@@ -13,6 +13,7 @@ use Simp\Pindrop\Modules\streamer\src\Plugin\PlayerManifestManager;
 use Simp\Pindrop\Modules\streamer\src\Plugin\Playlist;
 use Simp\Pindrop\Modules\streamer\src\Plugin\Show;
 use Simp\Pindrop\Modules\streamer\src\Services\PlayerActivityRecorder;
+use Simp\Pindrop\Routing\Url;
 use Simp\VideoPhp\player\VideoPlayerStreamer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,11 +43,22 @@ class PlayerController extends ControllerBase
         $show_id = $request->query->get('show_id');
         $season_id = $request->query->get('sid');
 
-        if ($show_id && $season_id) {
+        $seasons = $this->show->getSeasonsLocally(['series_id' => $show_id, 'limit' => 500])['seasons'] ?? [];
+
+        if (empty($seasons)) {
+            return $this->redirect(Url::routeByName("streamer_frontend.front.show.detail",['show_id' => $show_id]));
+        }
+
+
+        if (empty($season_id) && !empty($seasons)) {
+            $season_id = $seasons[0]['id'];
+            return $this->redirect(Url::routeByName("streamer.dashboard.shows.watch",['show_id' => $show_id, 'sid'=>$season_id]));
+        }
+
+        if ($show_id) {
             $show = $this->show->getShowLocally($show_id);
             $season = $this->show->getSeasonLocally($season_id);
-            $seasons = $this->show->getSeasonsLocally(['series_id' => $show_id, 'limit' => 500])['seasons'] ?? [];
-          //  dump($seasons);
+
             return $this->renderTwig("@streamer/player/show.html.twig", [
                 'show' => $show,
                 'season' => $season,
@@ -261,7 +273,7 @@ class PlayerController extends ControllerBase
     {
         $session_token = $request->query->get('session_token');
         if ($session_token) {
-            $playlist = $this->playlist->getPlaylist($session_token);
+            $playlist = $this->playlist->getPlaylist(pid: $session_token);
             return $this->renderTwig('@streamer/player/playlist.html.twig', [
                 'playlist' => $playlist,
                 'unique' => time(),
