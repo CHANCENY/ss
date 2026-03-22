@@ -70,6 +70,8 @@ class FrontendController extends ControllerBase
             $randomFeatured['duration'] = streamer_frontend_format_minutes($randomFeatured['duration']);
         }
 
+        dump($randomFeatured);
+
         foreach ($popularMovies as $k=>$popularMovie) {
             $popularMovies[$k]['thumbnail_path'] = streamer_frontend_image_path_resolve($popularMovie['thumbnail_path']);
             $popularMovies[$k]['duration'] = streamer_frontend_format_minutes($popularMovie['duration']);
